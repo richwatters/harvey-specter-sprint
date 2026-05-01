@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 @theme inline {
   --font-inter: var(--font-inter);
   --font-playfair: var(--font-playfair);

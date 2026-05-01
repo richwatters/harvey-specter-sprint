@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useRef } from "react";
 
 const assets = {
   heroBg: "https://www.figma.com/api/mcp/asset/57ecf98a-978e-4fa7-b1e1-5b7d2346497b",
@@ -29,7 +31,7 @@ const assets = {
 
 function Nav() {
   return (
-    <nav className="flex items-center justify-between py-6 w-full relative z-10">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between py-6 w-full px-4 lg:px-8">
       <span className="font-semibold text-base tracking-[-0.04em] text-black uppercase">H.Studio</span>
 
       {/* Mobile: hamburger */}
@@ -42,7 +44,7 @@ function Nav() {
       {/* Desktop: nav links + CTA */}
       <div className="hidden lg:flex items-center gap-14">
         {["About", "Services", "Projects", "News", "Contact"].map((item) => (
-          <a key={item} href="#" className="font-semibold text-base tracking-[-0.04em] text-black uppercase hover:opacity-60 transition-opacity">
+          <a key={item} href="#" className="font-semibold text-base tracking-[-0.04em] text-black hover:opacity-60 transition-opacity">
             {item}
           </a>
         ))}
@@ -56,30 +58,26 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden flex flex-col px-4 lg:px-8" style={{ minHeight: "847px" }}>
-      {/* Background photo — mobile: full cover; desktop: oversized + offset */}
-      <div className="absolute inset-0 lg:hidden">
+    <section className="relative overflow-hidden flex flex-col px-4 lg:px-8 pt-20 lg:h-screen" style={{ minHeight: "600px" }}>
+      {/* Background photo — 1280×853 aspect ratio on desktop so object-cover shows the full man */}
+      <div className="absolute inset-0">
         <img
-          src={assets.heroBg}
+          src="/pexels-vazhnik-7562188.jpg"
           alt=""
-          className="absolute inset-0 w-[139.47%] h-full object-cover object-top pointer-events-none"
-        />
-      </div>
-      <div className="hidden lg:block absolute inset-0 -translate-x-[34.79%] w-[169.58%]" style={{ top: "88px" }}>
-        <img
-          src={assets.heroBg}
-          alt=""
-          className="w-full h-full object-cover object-bottom pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         />
       </div>
 
-      {/* Blur overlay */}
+      {/* Gradient blur — full strength at bottom, fades to nothing 40% up */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-[349px]"
-        style={{ backdropFilter: "blur(10px)", background: "rgba(217,217,217,0.01)" }}
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          maskImage: "linear-gradient(to top, black 0%, black 20%, transparent 40%)",
+          WebkitMaskImage: "linear-gradient(to top, black 0%, black 20%, transparent 40%)",
+        }}
       />
-
-      <Nav />
 
       {/* Mobile layout: headline + desc/CTA stacked, filling remaining height */}
       <div className="lg:hidden relative flex flex-col items-center justify-between flex-1 pb-6 gap-8">
@@ -87,18 +85,18 @@ function Hero() {
           <p className="font-mono text-sm text-white uppercase mix-blend-overlay">[ Hello i&apos;m ]</p>
           <h1
             className="font-medium text-white text-center mix-blend-overlay uppercase w-full"
-            style={{ fontSize: "96px", lineHeight: 0.8, letterSpacing: "-0.07em" }}
+            style={{ fontSize: "clamp(56px, 25vw, 96px)", lineHeight: 0.8, letterSpacing: "-0.07em" }}
           >
             Harvey&nbsp;&nbsp;&nbsp;Specter
           </h1>
         </div>
         <div className="flex flex-col gap-4 items-start w-[293px]">
-          <p className="text-[#1f1f1f] text-sm tracking-[-0.04em] leading-[1.1]">
-            <strong className="font-bold italic uppercase">H.Studio is a </strong>
-            <span className="italic">full-service</span>
-            <strong className="font-bold italic uppercase"> creative studio creating beautiful digital experiences and products. We are an </strong>
-            <span className="italic">award winning</span>
-            <strong className="font-bold italic uppercase"> design and art group specializing in branding, web design and engineering.</strong>
+          <p className="text-[#1f1f1f] text-sm tracking-[-0.04em] leading-[1.1] uppercase italic font-bold">
+            H.Studio is a{" "}
+            <span className="font-normal">full-service</span>
+            {" "}creative studio creating beautiful digital experiences and products. We are an{" "}
+            <span className="font-normal">award winning</span>
+            {" "}design and art group specializing in branding, web design and engineering.
           </p>
           <button className="bg-black text-white text-sm font-medium tracking-[-0.04em] px-4 py-3 rounded-3xl hover:bg-neutral-800 transition-colors">
             Let&apos;s talk
@@ -106,30 +104,30 @@ function Hero() {
         </div>
       </div>
 
-      {/* Desktop layout: headline mid-page, desc bottom-right */}
-      <div className="hidden lg:flex relative mt-auto pb-0 flex-col items-center w-full">
+      {/* Desktop: all content pinned to bottom — absolute so it's visible at every breakpoint */}
+      <div className="hidden lg:block absolute bottom-0 left-0 right-0 px-8">
         <div className="w-full mb-[-15px] px-[18px]">
           <p className="font-mono text-sm text-white uppercase mix-blend-overlay">[ Hello i&apos;m ]</p>
         </div>
         <h1
           className="font-medium text-white text-center mix-blend-overlay uppercase w-full"
-          style={{ fontSize: "198px", lineHeight: 1.1, letterSpacing: "-0.07em" }}
+          style={{ fontSize: "clamp(60px, 11.5vw, 165px)", lineHeight: 1.1, letterSpacing: "-0.07em" }}
         >
           Harvey&nbsp;&nbsp;&nbsp;Specter
         </h1>
-      </div>
-      <div className="hidden lg:flex relative justify-end w-full pb-12">
-        <div className="flex flex-col gap-4 items-start w-[294px]">
-          <p className="text-[#1f1f1f] text-sm tracking-[-0.04em] leading-[1.1]">
-            <strong className="font-bold italic uppercase">H.Studio is a </strong>
-            <span className="italic">full-service</span>
-            <strong className="font-bold italic uppercase"> creative studio creating beautiful digital experiences and products. We are an </strong>
-            <span className="italic">award winning</span>
-            <strong className="font-bold italic uppercase"> design and art group specializing in branding, web design and engineering.</strong>
-          </p>
-          <button className="bg-black text-white text-sm font-medium tracking-[-0.04em] px-4 py-3 rounded-3xl hover:bg-neutral-800 transition-colors">
-            Let&apos;s talk
-          </button>
+        <div className="flex justify-end pb-12 mt-2">
+          <div className="flex flex-col gap-4 items-start w-[294px]">
+            <p className="text-[#1f1f1f] text-sm tracking-[-0.04em] leading-[1.1] uppercase italic font-bold">
+              H.Studio is a{" "}
+              <span className="font-normal">full-service</span>
+              {" "}creative studio creating beautiful digital experiences and products. We are an{" "}
+              <span className="font-normal">award winning</span>
+              {" "}design and art group specializing in branding, web design and engineering.
+            </p>
+            <button className="bg-black text-white text-sm font-medium tracking-[-0.04em] px-4 py-3 rounded-3xl hover:bg-neutral-800 transition-colors">
+              Let&apos;s talk
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -180,17 +178,17 @@ function BioSection() {
               on the south side
             </h2>
           </div>
-          <div className="relative pl-[606px] whitespace-nowrap">
+          <div className="pl-[606px] whitespace-nowrap">
             <h2
               className="font-light text-black uppercase"
               style={{ fontSize: "96px", lineHeight: 0.84, letterSpacing: "-0.08em" }}
             >
               of chicago.
             </h2>
-            <p className="absolute font-mono text-sm text-[#1f1f1f] whitespace-nowrap" style={{ left: "1079px", top: "26px" }}>
-              [ creative freelancer ]
-            </p>
           </div>
+          <p className="font-mono text-sm text-[#1f1f1f] whitespace-nowrap pl-[606px] mt-2">
+            [ creative freelancer ]
+          </p>
         </div>
       </div>
     </section>
@@ -373,7 +371,7 @@ function PortfolioSection() {
             </div>
           </div>
 
-          <div className="flex flex-1 flex-col gap-[117px] pt-[240px] min-w-0">
+          <div className="flex flex-1 flex-col gap-[117px] pt-[420px] min-w-0">
             <ProjectCard title="Agency 976" tags={["Social Media", "Photography"]} img={assets.project3} height="699px" />
             <ProjectCard title="Minimal Playground" tags={["Social Media", "Photography"]} img={assets.project4} height="744px" />
           </div>
@@ -418,29 +416,69 @@ const testimonials = [
   },
 ];
 
+function DraggableCard({ t, zBase }: { t: typeof testimonials[0]; zBase: number }) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const origin = useRef({ cx: 0, cy: 0, ox: 0, oy: 0 });
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDragging(true);
+    origin.current = { cx: e.clientX, cy: e.clientY, ox: offset.x, oy: offset.y };
+    const onMove = (ev: MouseEvent) => {
+      setOffset({
+        x: origin.current.ox + ev.clientX - origin.current.cx,
+        y: origin.current.oy + ev.clientY - origin.current.cy,
+      });
+    };
+    const onUp = () => {
+      setDragging(false);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  };
+
+  return (
+    <div
+      onMouseDown={onMouseDown}
+      className="absolute flex items-center justify-center"
+      style={{
+        ...t.style,
+        transform: `translate(${offset.x}px, ${offset.y}px)`,
+        zIndex: dragging ? 50 : zBase,
+        cursor: dragging ? "grabbing" : "grab",
+        userSelect: "none",
+      }}
+    >
+      <div className={`${t.rotate} flex-none`}>
+        <div
+          className="flex flex-col gap-4 items-start p-6 rounded-[4px] w-[353px]"
+          style={{ background: "#f1f1f1", border: "1px solid #ddd" }}
+        >
+          <img src={t.stars} alt="Stars" className="h-5 w-auto" />
+          <p className="text-[#1f1f1f] text-[18px] leading-[1.3] tracking-[-0.04em]">{t.text}</p>
+          <p className="font-black text-black text-base tracking-[-0.04em] uppercase">{t.name}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TestimonialsSection() {
   return (
-    <section className="relative overflow-hidden px-8 py-[120px] flex flex-col gap-2.5 items-center justify-center" style={{ height: "987px" }}>
-      {testimonials.map((t) => (
-        <div key={t.name} className={t.pos} style={t.style}>
-          <div className={`${t.rotate} flex-none`}>
-            <div
-              className="flex flex-col gap-4 items-start p-6 rounded-[4px] w-[353px]"
-              style={{ background: "#f1f1f1", border: "1px solid #ddd" }}
-            >
-              <img src={t.stars} alt="Stars" className="h-5 object-contain" />
-              <p className="text-[#1f1f1f] text-[18px] leading-[1.3] tracking-[-0.04em]">{t.text}</p>
-              <p className="font-black text-black text-base tracking-[-0.04em] uppercase">{t.name}</p>
-            </div>
-          </div>
-        </div>
-      ))}
+    <section className="relative overflow-hidden px-8 py-[120px] flex items-center justify-center" style={{ height: "987px" }}>
+      {/* h2 first in DOM so cards (rendered after) stack on top */}
       <h2
-        className="font-medium text-black text-center capitalize relative"
-        style={{ fontSize: "198px", letterSpacing: "-0.07em", lineHeight: 1.1 }}
+        className="font-medium text-black text-center capitalize"
+        style={{ fontSize: "198px", letterSpacing: "-0.07em", lineHeight: 1.1, zIndex: 0, position: "relative" }}
       >
         Testimonials
       </h2>
+      {testimonials.map((t, i) => (
+        <DraggableCard key={t.name} t={t} zBase={i + 10} />
+      ))}
     </section>
   );
 }
@@ -452,10 +490,16 @@ const newsItems = [
 ];
 
 function NewsSection() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: "left" | "right") => {
+    scrollRef.current?.scrollBy({ left: dir === "right" ? 400 : -400, behavior: "smooth" });
+  };
+
   return (
-    <section className="bg-[#f3f3f3] px-8 py-[120px] overflow-hidden">
-      <div className="flex items-end justify-between w-full">
-        <div className="flex items-center justify-center h-[706px] w-[110px] shrink-0">
+    <section className="bg-[#f3f3f3] px-8 py-[120px]">
+      <div className="flex items-end gap-8 w-full">
+        <div className="flex items-center justify-center shrink-0 w-[110px] h-[580px]">
           <h2
             className="font-light text-black uppercase -rotate-90 whitespace-nowrap"
             style={{ fontSize: "64px", letterSpacing: "-0.08em", lineHeight: 0.86 }}
@@ -463,14 +507,23 @@ function NewsSection() {
             Keep up with my latest news &amp; achievements
           </h2>
         </div>
-        <div className="flex gap-[31px] items-start w-[1020px]">
-          {newsItems.map((item, i) => (
-            <React.Fragment key={i}>
-              <div className={`flex flex-col gap-4 w-[353px] shrink-0 ${i === 1 ? "pt-[120px]" : ""}`} style={{ height: i !== 1 ? "581px" : undefined }}>
-                <div className="relative h-[469px] w-full overflow-hidden shrink-0">
+
+        <div className="flex-1 flex flex-col gap-6 min-w-0">
+          <div
+            ref={scrollRef}
+            className="flex gap-[31px] overflow-x-auto scrollbar-hide"
+            style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none" }}
+          >
+            {newsItems.map((item, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-4 w-[353px] shrink-0"
+                style={{ scrollSnapAlign: "start" }}
+              >
+                <div className="relative h-[469px] w-full overflow-hidden">
                   <img src={item.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 </div>
-                <p className="text-[#1f1f1f] text-sm tracking-[-0.04em] leading-[1.3] flex-1">{item.text}</p>
+                <p className="text-[#1f1f1f] text-sm tracking-[-0.04em] leading-[1.3]">{item.text}</p>
                 <a href="#" className="flex items-center gap-2.5 border-b border-black pb-1 self-start">
                   <span className="text-black text-sm font-medium tracking-[-0.04em]">Read more</span>
                   <div className="w-[18px] h-[18px] -rotate-90">
@@ -478,13 +531,29 @@ function NewsSection() {
                   </div>
                 </a>
               </div>
-              {i < newsItems.length - 1 && (
-                <div className="flex-1 self-center min-w-px">
-                  <hr className="border-l border-[#1f1f1f]/20 h-full" style={{ height: "400px" }} />
-                </div>
-              )}
-            </React.Fragment>
-          ))}
+            ))}
+          </div>
+
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={() => scroll("left")}
+              className="w-10 h-10 rounded-full border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors group"
+              aria-label="Previous"
+            >
+              <div className="w-4 h-4 rotate-90 group-hover:invert">
+                <img src={assets.arrowDownSm} alt="" className="w-full h-full" />
+              </div>
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="w-10 h-10 rounded-full border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors group"
+              aria-label="Next"
+            >
+              <div className="w-4 h-4 -rotate-90 group-hover:invert">
+                <img src={assets.arrowDownSm} alt="" className="w-full h-full" />
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -540,6 +609,7 @@ function Footer() {
 export default function Home() {
   return (
     <main className="bg-[#fafafa] flex flex-col items-start w-full">
+      <Nav />
       <div className="w-full overflow-x-hidden">
         <Hero />
         <BioSection />
